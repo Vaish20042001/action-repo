@@ -1,0 +1,22 @@
+name: Trigger Webhook
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  send-webhook:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send webhook to external server
+        run: |
+          curl -X POST https://your-server-url.com/webhook \
+          -H "Content-Type: application/json" \
+          -d '{
+                "repository": "${{ github.repository }}",
+                "ref": "${{ github.ref }}",
+                "commit": "${{ github.sha }}",
+                "pushed_at": "${{ github.event.head_commit.timestamp }}"
+              }'
